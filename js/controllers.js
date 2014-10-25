@@ -16,14 +16,15 @@ angular.module('takeMeTo.controllers', ['ngRoute', 'angularLocalStorage', 'ngGeo
         $scope.data.destination = $routeParams.destination;
         $scope.data.connections = [];
         $scope.data.currentConnectionIndex = 0;
-        $scope.data.status = [];
+        $scope.data.errors = [];
+        $scope.data.loading = false;
         
         $scope.find = function(destination) {
             window.location.hash = '/' + destination;
             $scope.loadConnections(destination);
         }
         
-        $scope.bringMeHome = function() {
+        $scope.home = function() {
             var homeAddress = storage.get('homeAddress');
             window.location.hash = '/' + homeAddress;
             $scope.loadConnections(homeAddress);
@@ -31,6 +32,8 @@ angular.module('takeMeTo.controllers', ['ngRoute', 'angularLocalStorage', 'ngGeo
         
         $scope.loadConnections = function(destination) {
             $scope.data.connections = [];
+            $scope.data.errors = [];
+            $scope.data.loading = true;
             $geolocation.getCurrentPosition({ timeout: 100000 }).then(function(geoPosition) {
                 var lat = geoPosition.coords.latitude;
                 var lng = geoPosition.coords.longitude;
@@ -38,25 +41,24 @@ angular.module('takeMeTo.controllers', ['ngRoute', 'angularLocalStorage', 'ngGeo
                     .then(function(result) {
                         $scope.data.connections = result.connections;
                     })
-                    .catch(function(errors) {
-                        var message = '';
-                        for (var i = 0; i < errors.length; i += 1) {
-                            message = message + '\n' + errors[i].message;
-                        }
-                        alert('Oh noo!\n' + message);
+                    .catch(function(error) {
+                        var message = 'Problem with URL ' + error.config.url;
+                        $scope.data.errors.push(message);
                     })
                     .finally(function() {
-                        $scope.data.status = [];
-                    });
+                        $scope.data.loading = false;
+                    })
             });
         };
         
         $scope.displayNextConnection = function() {
-            $scope.data.currentConnectionIndex = ($scope.data.currentConnectionIndex + 4 + 1) % 4;
+            var numberOfConnections = $scope.data.connections.length;
+            $scope.data.currentConnectionIndex = ($scope.data.currentConnectionIndex + numberOfConnections + 1) % numberOfConnections;
         };
         
         $scope.displayPreviousConnection = function() {
-            $scope.data.currentConnectionIndex = ($scope.data.currentConnectionIndex + 4 - 1) % 4;
+            var numberOfConnections = $scope.data.connections.length;
+            $scope.data.currentConnectionIndex = ($scope.data.currentConnectionIndex + numberOfConnections - 1) % numberOfConnections;
         };
         
         $scope.nextEvent = function() {
@@ -80,6 +82,10 @@ angular.module('takeMeTo.controllers', ['ngRoute', 'angularLocalStorage', 'ngGeo
                             $scope.data.status = [];
                         });
             });
+        };
+        
+        $scope.reload = function() {
+            location.reload();
         };
         
         if ($scope.data.destination != undefined) {
