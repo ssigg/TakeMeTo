@@ -1,0 +1,15 @@
+<div class="col-md-12">
+<h1>Setings</h1>
+    <form class="form-inline" role="form">
+        <div class="input-group">
+            <label class="sr-only" for="homeAddress">Destination</label>
+            <input type="text" id="homeAddress" class="form-control" placeholder="Home Address" required autofocus ng-model="data.homeAddress">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit" ng-click="set('homeAddress', data.homeAddress)">Set</button>
+            </span>
+        </div>
+    </form>
+</div>
+<div class="list-group">
+    <a href="#/">Back</a>
+</div>

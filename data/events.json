@@ -1,0 +1,32 @@
+{
+  "VCALENDAR": {
+    "VEVENT": [
+      {
+        "DTSTAMP": "20110328T203000",
+        "UID": "LFMEVENT-1748422",
+        "URL": "http://www.last.fm/event/1748422+Shout+Out+Louds+at+La+Machine+du+Moulin+Rouge+on+28+March+2011",
+        "SUMMARY": "Shout Out Louds at La Machine du Moulin Rouge",
+        "LOCATION": "La Machine du Moulin Rouge, Paris, France",
+        "DTEND": "20110328T235900",
+        "DTSTART": "20110328T203000",
+        "GEO": "2.332258;48.884008",
+        "DESCRIPTION": "Shout Out Louds\n\nhttp://www.last.fm/event/1748422+Shout+Out+Louds+at+La+Machine+du+Moulin+Rouge+on+28+March+2011"
+      },
+      {
+        "DTSTAMP": "20141101T203000",
+        "UID": "LFMEVENT-1755031",
+        "URL": "http://www.last.fm/event/1755031+Shout+Out+Louds+at+La+Nef+on+29+March+2011",
+        "SUMMARY": "Shout Out Louds + Hello Bye Bye at La Nef",
+        "LOCATION": "Berggasse 3, Kölliken",
+        "DTEND": "20110329T235900",
+        "DTSTART": "20110329T203000",
+        "GEO": "0.130579;45.640423",
+        "DESCRIPTION": "Shout Out Louds, Hello Bye Bye\n\nhttp://www.last.fm/event/1755031+Shout+Out+Louds+at+La+Nef+on+29+March+2011"
+      }
+    ],
+    "VERSION": "2.0",
+    "X-WR-CALNAME": "Last.fm Events",
+    "PRODID": "-//Last.fm Limited Event Feeds//NONSGML//EN",
+    "X-WR-CALDESC": "Event listing - supplied by http://www.Last.fm"
+  }
+}

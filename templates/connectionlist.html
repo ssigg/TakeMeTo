@@ -1,0 +1,65 @@
+<div class="col-md-4">
+<h1>Take me to</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <form role="form">
+                <div class="input-group">
+                    <label class="sr-only" for="destination">Destination</label>
+                    <input type="text" id="destination" class="form-control" placeholder="Destination" autofocus ng-model="data.destination">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" ng-click="find(data.destination)">Go!</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col-md-12">
+            <div class="btn-group btn-block">
+                <button type="button" class="btn btn-default btn-lg" ng-click="nextEvent()" title="Take me to the next event">
+                  <span class="glyphicon glyphicon-calendar"></span> Next
+                </button>
+                <button type="button" class="btn btn-default btn-lg" ng-click="home()" title="Bring me home">
+                  <span class="glyphicon glyphicon-home"></span> Home
+                </button>
+                <a href="#settings" class="btn btn-default btn-lg" title="Settings">
+                  <span class="glyphicon glyphicon-wrench"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8">
+    <ul style="margin-top:20px;" ng-if="data.status.length > 0">
+        <li ng-repeat="message in data.status">
+            {{message}}
+        </li>
+    </ul>
+    <div class="list-group" style="margin-top:20px;" ng-if="data.status.length == 0">
+        <ul class="list-group" ng-swipe-left="displayNextConnection()" ng-swipe-right="displayPreviousConnection()">
+            <li class="list-group-item active">Connection {{data.currentConnectionIndex + 1}} of 4</li>
+            <li class="list-group-item" ng-repeat="s in data.connections[data.currentConnectionIndex].sections">
+                <span ng-if="s.departure.station.name == null || s.arrival.station.name == null && s.walk == null">
+                    <!-- walk -->
+                    <ng-directions
+                        origin="{{s.departure.location.coordinate.y}},{{s.departure.location.coordinate.x}}"
+                        destination="{{s.arrival.location.coordinate.y}},{{s.arrival.location.coordinate.x}}" />
+                </span>
+                <span ng-if="s.walk != null">
+                    <!-- walk -->
+                    <ng-directions
+                        origin="{{s.departure.location.coordinate.y}},{{s.departure.location.coordinate.x}}"
+                        destination="{{s.arrival.location.coordinate.y}},{{s.arrival.location.coordinate.x}}" />
+                </span>
+                <span ng-if="s.departure.station.name != null && s.arrival.station.name != null && s.walk == null">
+                    <!-- use train -->
+                    {{s.departure.station.name}} {{s.departure.departureTimestamp | dateFromTimestamp | date : 'HH:mm'}}
+                    <span ng-if="s.departure.platform != ''">, Platform {{s.departure.platform}}</span><br>
+                    <strong>{{s.journey.name}}</strong><br>
+                    {{s.arrival.station.name}} {{s.arrival.arrivalTimestamp | dateFromTimestamp | date : 'HH:mm'}}
+                    <span ng-if="s.arrival.platform != ''">, Platform {{s.arrival.platform}}</span>
+                </span>
+            </li>
+        </ul>
+    </div>   
+</div>
