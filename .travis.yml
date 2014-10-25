@@ -4,4 +4,4 @@ node_js:
 before_script:
     - cd test
 script:
-    karma start
+    test
