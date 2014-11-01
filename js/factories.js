@@ -37,7 +37,7 @@ angular.module('takeMeTo.factories', ['ngGeolocation'])
                 var to = aggregate[1].name;
                 var url = 'http://transport.opendata.ch/v1/connections?from=' + from + '&to=' + to + '&limit=' + limit;
                 if (date !== undefined) {
-                    var dateString = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay();
+                    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
                     var timeString = date.getHours() + ':' + date.getMinutes();
                     url = url + '&isArrivalTime=1&date=' + dateString + '&time=' + timeString;
                 }
@@ -51,7 +51,10 @@ angular.module('takeMeTo.factories', ['ngGeolocation'])
         return $http.get(icsUrl).then(function(result) {
             var events = result.data.VCALENDAR.VEVENT;
             for (var i = 0; i < events.length; i += 1) {
-                var date = new Date(_DTSTAMP2Date(events[i].DTSTAMP));
+                var date = new Date(_DTSTAMP2Date(events[i].DTSTART));
+                if (date.getFullYear() >= 2014) {
+                    console.log(date);
+                }
                 if (date > new Date()) {
                     return getConnections(lat, lng, events[i].LOCATION, limit, date);
                 }
@@ -62,13 +65,13 @@ angular.module('takeMeTo.factories', ['ngGeolocation'])
     
     function _DTSTAMP2Date(DTSTAMP)  {
         // icalStr = '20110914T184000Z'
-        var strYear = DTSTAMP.substr(0,4);
-        var strMonth = DTSTAMP.substr(4,2);
-        var strDay = DTSTAMP.substr(6,2);
-        var strHour = DTSTAMP.substr(9,2);
-        var strMin = DTSTAMP.substr(11,2);
-        var strSec = DTSTAMP.substr(13,2);
-        return new Date(strYear,strMonth, strDay, strHour, strMin, strSec);
+        var strYear = parseInt(DTSTAMP.substr(0,4));
+        var strMonth = parseInt(DTSTAMP.substr(4,2)) - 1;
+        var strDay = parseInt(DTSTAMP.substr(6,2));
+        var strHour = parseInt(DTSTAMP.substr(9,2));
+        var strMin = parseInt(DTSTAMP.substr(11,2));
+        var strSec = parseInt(DTSTAMP.substr(13,2));
+        return new Date(strYear,strMonth, strDay, strHour, strMin, strSec, 0);
     }
     
     return {

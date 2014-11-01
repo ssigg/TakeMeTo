@@ -67,10 +67,10 @@
                         </span>
                         <span ng-if="s.departure.station.name != null && s.arrival.station.name != null && s.walk == null">
                             <!-- use train -->
-                            {{s.departure.station.name}} {{s.departure.departureTimestamp | dateFromTimestamp | date : 'HH:mm'}}
+                            {{s.departure.station.name}} {{s.departure.departureTimestamp | dateFromTimestamp | date : 'dd.MM.yyyy, HH:mm'}}
                             <span ng-if="s.departure.platform != ''">, Platform {{s.departure.platform}}</span><br>
                             <strong>{{s.journey.name}}</strong><br>
-                            {{s.arrival.station.name}} {{s.arrival.arrivalTimestamp | dateFromTimestamp | date : 'HH:mm'}}
+                            {{s.arrival.station.name}} {{s.arrival.arrivalTimestamp | dateFromTimestamp | date : 'dd.MM.yyyy, HH:mm'}}
                             <span ng-if="s.arrival.platform != ''">, Platform {{s.arrival.platform}}</span>
                         </span>
                     </li>
