@@ -242,10 +242,10 @@ describe('takeMeTo.factories', function() {
         var calendarResponse = {
             VCALENDAR: {
                 VEVENT: [{
-                    DTSTAMP: '20110328T203000',
+                    DTSTART: '20110328T203000',
                     LOCATION: 'calendar address 1'
                 }, {
-                    DTSTAMP: '30000101T120000',
+                    DTSTART: '30000101T120000',
                     LOCATION: 'calendar address 2'
                 }]
             }
@@ -271,7 +271,7 @@ describe('takeMeTo.factories', function() {
             .expectGET('http://transport.opendata.ch/v1/locations?query=geocoded address&type=station')
             .respond(200, stationResponse);
         $httpBackend
-            .expectGET('http://transport.opendata.ch/v1/connections?from=A&to=A&limit=4&isArrivalTime=1&date=3000-1-6&time=12:0')
+            .expectGET('http://transport.opendata.ch/v1/connections?from=A&to=A&limit=4&isArrivalTime=1&date=3000-1-1&time=12:0')
             .respond(200, connectionsResponse);
         
         var connections = [];
@@ -286,10 +286,10 @@ describe('takeMeTo.factories', function() {
         var calendarResponse = {
             VCALENDAR: {
                 VEVENT: [{
-                    DTSTAMP: '20110328T203000',
+                    DTSTART: '20110328T203000',
                     LOCATION: 'calendar address 1'
                 }, {
-                    DTSTAMP: '20110401T120000',
+                    DTSTART: '20110401T120000',
                     LOCATION: 'calendar address 2'
                 }]
             }

@@ -4,4 +4,4 @@ node_js:
 before_script:
     - cd test
 script:
-    test
+    ./node_modules/.bin/karma start --single-run --browsers PhantomJS
