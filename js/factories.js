@@ -2,36 +2,28 @@ angular.module('takeMeTo.factories', ['ngGeolocation'])
 
 // Gets data from different web services.
 // ==========================================================================
-.factory('webservices', ['$q', '$http', function($q, $http) {    
-    function getBestStationByAddress(address) {
-        // TODO: If no address can be found, check via google:
-        // * What the coordinates of the address are
-        // * Then use getBestStationByCoordinates(lat, lng)
-        var urlByAddress = 'http://transport.opendata.ch/v1/locations?query=' + address + '&type=address';
-        var urlByStation = 'http://transport.opendata.ch/v1/locations?query=' + address + '&type=station';
-        return $q.all([$http.get(urlByAddress), $http.get(urlByStation)])
-            .then(function(aggregate) {
-                if (aggregate[0].data.stations.length > 0) {
-                    return aggregate[0].data.stations[0];
-                } else if (aggregate[1].data.stations.length > 0) {
-                    return aggregate[1].data.stations[0];
-                }
-                return null;
-            });
+.factory('webservices', ['$q', '$http', function($q, $http) {
+    function getBestStationByQuery(query) {
+        var url = 'http://maps.google.com/maps/api/geocode/json?address=' + query;
+        return $http.get(url).then(function(geoCodeResult) {
+            var lat = geoCodeResult.data.results[0].geometry.location.lat;
+            var lng = geoCodeResult.data.results[0].geometry.location.lng;
+            return getBestStationByCoordinates(lat, lng);
+        });
     }
     
     function getBestStationByCoordinates(lat, lng) {
         var url = 'http://maps.google.com/maps/api/geocode/json?latlng=' + lat + ',' + lng;
         return $http.get(url).then(function(geoCodeResult) {
             var address = geoCodeResult.data.results[0].formatted_address;
-            return getBestStationByAddress(address);
+            return _getBestStationByAddress(address);
         });
     }
     
     function getConnections(lat, lng, destination, limit, date) {
         return $q.all([
                 getBestStationByCoordinates(lat, lng),
-                getBestStationByAddress(destination)])
+                getBestStationByQuery(destination)])
             .then(function(aggregate) {
                 var from = aggregate[0].name;
                 var to = aggregate[1].name;
@@ -63,6 +55,20 @@ angular.module('takeMeTo.factories', ['ngGeolocation'])
         });
     }
     
+    function _getBestStationByAddress(address) {
+        var urlByAddress = 'http://transport.opendata.ch/v1/locations?query=' + address + '&type=address';
+        var urlByStation = 'http://transport.opendata.ch/v1/locations?query=' + address + '&type=station';
+        return $q.all([$http.get(urlByAddress), $http.get(urlByStation)])
+            .then(function(aggregate) {
+                if (aggregate[0].data.stations.length > 0) {
+                    return aggregate[0].data.stations[0];
+                } else if (aggregate[1].data.stations.length > 0) {
+                    return aggregate[1].data.stations[0];
+                }
+                return null;
+            });
+    }
+    
     function _DTSTAMP2Date(DTSTAMP)  {
         // icalStr = '20110914T184000Z'
         var strYear = parseInt(DTSTAMP.substr(0,4));
@@ -75,7 +81,7 @@ angular.module('takeMeTo.factories', ['ngGeolocation'])
     }
     
     return {
-        BestStationByAddress: getBestStationByAddress,
+        BestStationByQuery: getBestStationByQuery,
         BestStationByCoordinates: getBestStationByCoordinates,
         Connections: getConnections,
         ConnectionsToNextEvent: getConnectionsToNextEvent

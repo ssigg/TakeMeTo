@@ -255,6 +255,9 @@ describe('takeMeTo.factories', function() {
         $httpBackend
             .expectGET(calendarUrl)
             .respond(200, calendarResponse);
+//        $httpBackend
+//            .expectGET('http://maps.google.com/maps/api/geocode/json?query=calendar address 2')
+//            .respond(200, geoCodeResponse);
         $httpBackend
             .expectGET('http://maps.google.com/maps/api/geocode/json?latlng=0,0')
             .respond(200, geoCodeResponse);
