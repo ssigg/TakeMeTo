@@ -2,8 +2,5 @@
   "name": "take-me-to",
   "devDependencies": {
     "karma": "~0.8"
-  },
-  "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS"
   }
 }
